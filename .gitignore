@@ -13,3 +13,8 @@ staticfiles/
 .DS_Store
 .vscode/
 .idea/
+# Respaldos: conservar fuera de Git
+backup_final.json
+backup_*.json
+*.sql
+*.sql.gz
