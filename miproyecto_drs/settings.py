@@ -1,4 +1,4 @@
-"""Configuración del proyecto: conserva la conexión Aiven de Semana 5."""
+"""Configuración del proyecto Django con MySQL en Aiven."""
 from pathlib import Path
 import pymysql
 from decouple import config, Csv
@@ -45,7 +45,7 @@ TEMPLATES = [{
 }]
 WSGI_APPLICATION = 'miproyecto_drs.wsgi.application'
 
-# La base de datos es la MISMA Aiven de Semana 5, no crear otra.
+# Se conserva la base Aiven de la semana anterior.
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -65,8 +65,8 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+LANGUAGE_CODE = 'es-mx'
+TIME_ZONE = 'America/Hermosillo'
 USE_I18N = True
 USE_TZ = True
 STATIC_URL = 'static/'
@@ -77,7 +77,17 @@ STORAGES = {
     'staticfiles': {'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage'},
 }
 
-# LOGIN_URL: a dónde manda @login_required a un visitante sin sesión; 'login' es el name= de tu ruta /login/
 LOGIN_URL = 'login'
-# LOGIN_REDIRECT_URL: a dónde va el usuario justo después de iniciar sesión con éxito
 LOGIN_REDIRECT_URL = 'servicios'
+
+# Seguridad de producción (Render finaliza TLS delante de Gunicorn).
+# Se activan solo cuando DEBUG=False para permitir pruebas locales por HTTP.
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG
+SECURE_SSL_REDIRECT = not DEBUG
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
+SECURE_HSTS_SECONDS = 3600 if not DEBUG else 0
+SECURE_HSTS_INCLUDE_SUBDOMAINS = False
+SECURE_HSTS_PRELOAD = False
